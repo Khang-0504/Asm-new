@@ -22,7 +22,7 @@ CREATE TABLE Users (
     Email NVARCHAR(255) UNIQUE,
     Role BIT NOT NULL -- 1: Quản trị, 0: Phóng viên
 );
-
+select * from 
 -- Bảng News (Tin tức)
 CREATE TABLE News (
     Id NVARCHAR(50) PRIMARY KEY,

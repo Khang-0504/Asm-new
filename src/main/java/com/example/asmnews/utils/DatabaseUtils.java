@@ -13,7 +13,7 @@ public class DatabaseUtils {
     private static final String PORT = "1433";
     private static final String DATABASE = "ASM_NEWS";
     private static final String USERNAME = "sa";
-    private static final String PASSWORD = "123";
+    private static final String PASSWORD = "";
 
     // URL kết nối
     private static final String URL = "jdbc:sqlserver://" + SERVER + ":" + PORT +

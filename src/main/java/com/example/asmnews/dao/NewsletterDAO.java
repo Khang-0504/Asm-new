@@ -208,14 +208,20 @@ public class NewsletterDAO {
      * @return true nếu thành công
      */
     public boolean delete(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+
+        email = email.trim().toLowerCase(); // chuẩn hóa email trước khi dùng
+
         String sql = "DELETE FROM Newsletters WHERE Email = ?";
 
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, email);
-
             int result = ps.executeUpdate();
+            System.out.println("Xóa email: [" + email + "], rows affected: " + result);
             return result > 0;
 
         } catch (SQLException e) {
@@ -223,6 +229,7 @@ public class NewsletterDAO {
             return false;
         }
     }
+
 
     /**
      * Kiểm tra email đã đăng ký newsletter chưa

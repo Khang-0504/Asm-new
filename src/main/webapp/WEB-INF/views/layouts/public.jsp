@@ -69,70 +69,7 @@
 
             <body>
                 <!-- Header -->
-                <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-                    <div class="container">
-                        <a class="navbar-brand" href="${pageContext.request.contextPath}/">
-                            <i class="fas fa-newspaper"></i> ASM News
-                        </a>
-
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarNav">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav me-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/">Trang chủ</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/news">Tin tức</a>
-                                </li>
-                                <c:forEach var="category" items="${categories}">
-                                    <li class="nav-item">
-                                        <a class="nav-link"
-                                            href="${pageContext.request.contextPath}/news?action=category&id=${category.id}">
-                                            ${category.name}
-                                        </a>
-                                    </li>
-                                </c:forEach>
-                            </ul>
-
-                            <ul class="navbar-nav">
-                                <c:choose>
-                                    <c:when test="${sessionScope.currentUser != null}">
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                                role="button" data-bs-toggle="dropdown">
-                                                <i class="fas fa-user"></i> ${sessionScope.currentUser.fullname}
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item"
-                                                        href="${pageContext.request.contextPath}/admin">
-                                                        <i class="fas fa-tachometer-alt"></i> Quản trị
-                                                    </a></li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li><a class="dropdown-item"
-                                                        href="${pageContext.request.contextPath}/logout">
-                                                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                                                    </a></li>
-                                            </ul>
-                                        </li>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/login">
-                                                <i class="fas fa-sign-in-alt"></i> Đăng nhập
-                                            </a>
-                                        </li>
-                                    </c:otherwise>
-                                </c:choose>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
+               
 
                 <!-- Messages -->
                 <c:if test="${sessionScope.successMessage != null}">

@@ -17,17 +17,12 @@
     
     <style>
         :root {
-            --primary-color: #1a365d;
-            --secondary-color: #2563eb;
-            --accent-color: #dc2626;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --bg-light: #f8fafc;
-            --bg-white: #ffffff;
-            --border-light: #e2e8f0;
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: #0f172a;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         * {
@@ -37,622 +32,561 @@
         }
 
         body {
-            background-color: var(--bg-light);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            color: var(--text-primary);
-            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
         }
 
-        /* Professional Navbar */
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(245, 87, 108, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Enhanced Navbar */
         .navbar {
-            background-color: var(--bg-white);
-            box-shadow: var(--shadow-sm);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid var(--border-light);
             transition: all 0.3s ease;
         }
-        .navbar-nav .nav-link:hover::after,
-.navbar-nav .nav-link.active::after {
-    width: 80%;
-}
 
         .navbar.scrolled {
-            box-shadow: var(--shadow-md);
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
         }
 
         .navbar-brand {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--primary-color);
-            transition: color 0.3s ease;
-            letter-spacing: -0.5px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
         }
 
         .navbar-brand:hover {
-            color: var(--secondary-color);
-        }
-
-        .navbar-brand i {
-            color: var(--secondary-color);
-            margin-right: 8px;
+            transform: scale(1.05);
         }
 
         .navbar-nav .nav-link {
-            color: var(--text-primary) !important;
+            color: #334155 !important;
             font-weight: 500;
-            font-size: 0.95rem;
-            margin: 0 0.25rem;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+            margin: 0 0.5rem;
+            position: relative;
             transition: all 0.3s ease;
         }
 
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
-            background-color: var(--bg-light);
-            color: var(--secondary-color) !important;
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
 
-        .dropdown-menu {
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-lg);
-            border-radius: 8px;
-            padding: 0.5rem;
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 80%;
         }
 
-        .dropdown-item {
-            border-radius: 6px;
-            padding: 0.5rem 1rem;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
+        .navbar-nav .nav-link:hover {
+            color: #667eea !important;
+            transform: translateY(-2px);
         }
 
-        .dropdown-item:hover {
-            background-color: var(--bg-light);
-            color: var(--secondary-color);
-        }
-
-        /* Elegant Carousel */
+        /* Modern Carousel */
         #homeCarousel {
-            border-radius: 12px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
             position: relative;
         }
 
-        #homeCarousel::after {
+        #homeCarousel::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.6) 100%);
-            pointer-events: none;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
             z-index: 1;
+            pointer-events: none;
         }
 
         #homeCarousel .carousel-item img {
             width: 100%;
-            height: 500px;
+            height: 550px;
             object-fit: cover;
             transition: transform 0.7s ease;
         }
 
         #homeCarousel .carousel-item.active img {
-            animation: smoothZoom 0.8s ease-out;
+            animation: zoomIn 0.7s ease;
         }
 
-        @keyframes smoothZoom {
+        @keyframes zoomIn {
             from {
-                transform: scale(1.08);
+                transform: scale(1.1);
+                opacity: 0.8;
             }
             to {
                 transform: scale(1);
+                opacity: 1;
             }
         }
 
         #homeCarousel .carousel-caption {
             position: absolute;
-            bottom: 18rem;
-            left: 3rem;
+            top: 25%;
+            left: 50px;
             right: auto;
-            top: auto;
-            transform: none;
-            width: 45%;
+            bottom: auto;
+            transform: translateY(-50%);
+            width: 30%;
             text-align: left;
-           background: rgba(0, 0, 0, 0.5);
-            color: var(--text-primary);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: var(--shadow-lg);
-            z-index: 2;
-            border-left: 4px solid var(--secondary-color);
+     
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 5;
             opacity: 0;
-            transition: all 0.6s ease;
-             backdrop-filter: blur(10px); /* tạo hiệu ứng mờ */
+            transform: translateY(-50%) translateX(-30px);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         #homeCarousel .carousel-item.active .carousel-caption {
             opacity: 1;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            transform: translateY(-50%) translateX(0);
         }
 
         #homeCarousel .carousel-caption h5 {
-            font-size: 1.75rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 1rem;
-           color: white;
-            line-height: 1.3;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         #homeCarousel .carousel-caption h5 a {
-              color: white;
+            color: #ffffff;
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         #homeCarousel .carousel-caption h5 a:hover {
-            color: var(--secondary-color);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
         }
 
         #homeCarousel .carousel-caption p {
-              color: white;
-            font-size: 1rem;
+            color: #f0f0f0;
+            font-size: 1.05rem;
             line-height: 1.6;
-            margin-bottom: 0;
         }
 
-        #homeCarousel .carousel-control-prev,
-        #homeCarousel .carousel-control-next {
-            width: 50px;
-            height: 50px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 50%;
-            opacity: 0;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-md);
+        /* Category Bar */
+        .category-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 0;
+            margin: 2rem 0;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow-x: auto;
+            scrollbar-width: none;
         }
 
-        #homeCarousel:hover .carousel-control-prev,
-        #homeCarousel:hover .carousel-control-next {
-            opacity: 0.9;
+        .category-bar::-webkit-scrollbar {
+            display: none;
         }
 
-        #homeCarousel .carousel-control-prev {
-            left: 1.5rem;
-        }
-
-        #homeCarousel .carousel-control-next {
-            right: 1.5rem;
-        }
-
-        #homeCarousel .carousel-control-prev:hover,
-        #homeCarousel .carousel-control-next:hover {
-            opacity: 1;
-            background-color: var(--secondary-color);
-        }
-
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            filter: invert(1);
-            width: 20px;
-            height: 20px;
-        }
-
-        #homeCarousel .carousel-control-prev:hover .carousel-control-prev-icon,
-        #homeCarousel .carousel-control-next:hover .carousel-control-next-icon {
-            filter: invert(0);
-        }
-
-        /* Refined News Cards */
-        .news-card {
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
+        .category-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
             overflow: hidden;
-            background: var(--bg-white);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
+        }
+
+        .category-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
             height: 100%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .category-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .category-item:hover::before {
+            left: 0;
+        }
+
+        /* News Cards */
+        .news-card {
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            background: white;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
         }
 
         .news-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--secondary-color);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .news-card:hover::before {
+            opacity: 0.05;
         }
 
         .news-image {
             height: 220px;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.6s ease;
+            position: relative;
         }
 
         .news-card:hover .news-image {
-            transform: scale(1.08);
+            transform: scale(1.1) rotate(1deg);
         }
 
         .news-card .card-body {
             padding: 1.5rem;
+            position: relative;
+            z-index: 2;
         }
 
         .news-card .card-title a {
-            color: var(--text-primary);
+            color: #1e293b;
             text-decoration: none;
             font-weight: 700;
-            font-size: 1.1rem;
-            line-height: 1.4;
+            font-size: 1.15rem;
+            transition: all 0.3s ease;
             display: block;
-            transition: color 0.3s ease;
         }
 
         .news-card:hover .card-title a {
-            color: var(--secondary-color);
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .news-card .card-text {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-top: 0.75rem;
-        }
-
-        /* Professional Section Titles */
+        /* Section Titles */
         .section-title {
             position: relative;
-            font-size: 1.75rem;
+            display: inline-block;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            color: var(--text-primary);
-            border-bottom: 2px solid var(--border-light);
+            padding-bottom: 15px;
         }
 
         .section-title::after {
             content: '';
             position: absolute;
-            bottom: -2px;
+            bottom: 0;
             left: 0;
-            width: 80px;
-            height: 2px;
-            background-color: var(--secondary-color);
+            width: 60px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
         }
 
         .section-title i {
-            color: var(--secondary-color);
-            margin-right: 0.75rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Elegant Sidebar Widgets */
+        /* Sidebar Widgets */
         .sidebar-widget {
-            background: var(--bg-white);
-            border-radius: 12px;
-            padding: 1.75rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-light);
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--card-shadow);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
         }
 
         .sidebar-widget:hover {
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .sidebar-widget:hover::before {
+            width: 100%;
+            opacity: 0.05;
         }
 
         .widget-title {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-light);
+            color: #1e293b;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
         }
 
         .widget-title i {
-            color: var(--secondary-color);
-            margin-right: 0.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Refined Most Viewed Items */
+        /* Most Viewed Items */
         .most-viewed-item {
             display: flex;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--border-light);
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f1f5f9;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .most-viewed-item:last-child {
             border-bottom: none;
-            padding-bottom: 0;
         }
 
         .most-viewed-item:hover {
-            background-color: var(--bg-light);
-            padding-left: 0.75rem;
-            margin-left: -0.75rem;
-            margin-right: -0.75rem;
-            padding-right: 0.75rem;
-            border-radius: 8px;
+            transform: translateX(5px);
+            background: #f8fafc;
+            padding-left: 10px;
+            border-radius: 10px;
         }
 
         .most-viewed-badge {
-            width: 36px;
-            height: 36px;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--secondary-color);
+            background: var(--primary-gradient);
             color: white;
-            border-radius: 8px;
+            border-radius: 50%;
             font-weight: 700;
-            font-size: 0.9rem;
             flex-shrink: 0;
         }
 
-        .most-viewed-item h6 {
-            margin-bottom: 0.5rem;
-        }
-
-        .most-viewed-item h6 a {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            line-height: 1.4;
-            transition: color 0.3s ease;
-        }
-
-        .most-viewed-item h6 a:hover {
-            color: var(--secondary-color);
-        }
-
-        /* Professional Newsletter Form */
+        /* Newsletter Form */
         .newsletter-form input {
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-size: 0.95rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 12px 20px;
             transition: all 0.3s ease;
         }
 
         .newsletter-form input:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             outline: none;
         }
 
         .newsletter-form button {
-            background-color: var(--secondary-color);
+            background: var(--primary-gradient);
             border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
+            border-radius: 15px;
+            padding: 12px 30px;
             font-weight: 600;
-            color: white;
             transition: all 0.3s ease;
         }
 
         .newsletter-form button:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
-        /* Elegant Footer */
+        /* Footer */
         .footer {
-            background-color: var(--primary-color);
-            color: #cbd5e1;
-            padding: 3rem 0 1.5rem;
+            background: var(--dark-bg);
+            color: #94a3b8;
+            padding: 3rem 0 1rem;
             margin-top: 4rem;
-            border-top: 4px solid var(--secondary-color);
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
         }
 
         .footer h5 {
-            color: white;
+            color: #f1f5f9;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            font-size: 1.25rem;
-        }
-
-        .footer p {
-            color: #cbd5e1;
-            line-height: 1.7;
-        }
-
-        .footer a {
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer a:hover {
-            color: white;
-        }
-
-        .footer .social-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .footer .social-links a:hover {
-            background-color: var(--secondary-color);
-            color: white;
-            transform: translateY(-3px);
         }
 
         .footer input {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            border-radius: 8px;
-            padding: 10px 16px;
-        }
-
-        .footer input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 15px;
         }
 
         .footer input:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
             outline: none;
-            background-color: rgba(255, 255, 255, 0.15);
         }
 
         .footer button {
-            background-color: var(--secondary-color);
+            background: var(--primary-gradient);
             border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            color: white;
+            border-radius: 10px;
             transition: all 0.3s ease;
         }
 
         .footer button:hover {
-            background-color: white;
-            color: var(--primary-color);
+            transform: scale(1.05);
         }
 
-        .footer hr {
-            border-color: rgba(255, 255, 255, 0.1);
-            margin: 2rem 0;
-        }
-
-        /* Professional Alerts */
+        /* Alerts */
         .alert {
-            border-radius: 10px;
+            border-radius: 15px;
             border: none;
-            box-shadow: var(--shadow-sm);
-            padding: 1rem 1.25rem;
+            box-shadow: var(--card-shadow);
+            animation: slideDown 0.5s ease;
         }
 
-        .alert i {
-            margin-right: 0.5rem;
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* News Meta Information */
-        .news-meta {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .news-meta i {
-            color: var(--secondary-color);
-            margin-right: 5px;
-        }
-
-        /* List Group Styling */
-        .list-group-item {
-            border: none;
-            border-radius: 8px !important;
-            margin-bottom: 0.5rem;
-            padding: 0.875rem 1rem;
-            color: var(--text-primary);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            background-color: var(--bg-light);
-        }
-
-        .list-group-item:hover {
-            background-color: var(--secondary-color);
-            color: white;
-            transform: translateX(8px);
-        }
-
-        .list-group-item i {
-            font-size: 0.85rem;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-
-        .list-group-item:hover i {
-            opacity: 1;
-        }
-
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 991px) {
             #homeCarousel .carousel-caption {
                 width: 70%;
-                padding: 1.5rem;
-                bottom: 2rem;
-                left: 2rem;
+                padding: 20px;
             }
             
             #homeCarousel .carousel-caption h5 {
-                font-size: 1.4rem;
-            }
-
-            #homeCarousel .carousel-caption p {
-                font-size: 0.9rem;
+                font-size: 1.5rem;
             }
         }
 
         @media (max-width: 575px) {
             #homeCarousel .carousel-caption {
-                bottom: 1rem;
-                left: 1rem;
-                right: 1rem;
-                width: calc(100% - 2rem);
-                padding: 1.25rem;
+                top: auto;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                width: calc(100% - 40px);
+                transform: none;
+                padding: 15px;
             }
 
-            #homeCarousel .carousel-item img {
-                height: 400px;
-            }
-
-            #homeCarousel .carousel-caption h5 {
-                font-size: 1.2rem;
-            }
-
-            #homeCarousel .carousel-caption p {
-                font-size: 0.85rem;
+            #homeCarousel .carousel-item.active .carousel-caption {
+                transform: none;
             }
 
             .section-title {
                 font-size: 1.5rem;
             }
 
-            .navbar-brand {
-                font-size: 1.3rem;
+            .category-item {
+                font-size: 0.95rem;
+                padding: 10px 18px;
             }
         }
 
-        /* Smooth Transitions */
-        * {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        /* Loading Animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .news-meta {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .news-meta i {
+            color: #667eea;
+            margin-right: 3px;
         }
     </style>
 </head>
 
 <body>
-    
     <!-- Header -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
@@ -675,8 +609,8 @@
                     <c:forEach var="category" items="${categories}">
                         <li class="nav-item">
                             <a class="nav-link"
-                               href="${pageContext.request.contextPath}/news?action=category&id=${category.id}">
-                               ${category.name}
+                                href="${pageContext.request.contextPath}/news?action=category&id=${category.id}">
+                                ${category.name}
                             </a>
                         </li>
                     </c:forEach>
@@ -687,19 +621,19 @@
                         <c:when test="${sessionScope.currentUser != null}">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                   role="button" data-bs-toggle="dropdown">
-                                   <i class="fas fa-user-circle"></i> ${sessionScope.currentUser.fullname}
+                                    role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user"></i> ${sessionScope.currentUser.fullname}
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
+                                <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"
-                                           href="${pageContext.request.contextPath}/admin">
-                                           <i class="fas fa-tachometer-alt"></i> Quản trị
-                                    </a></li>
+                                            href="${pageContext.request.contextPath}/admin">
+                                            <i class="fas fa-tachometer-alt"></i> Quản trị
+                                        </a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item"
-                                           href="${pageContext.request.contextPath}/logout">
-                                           <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                                    </a></li>
+                                            href="${pageContext.request.contextPath}/logout">
+                                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                        </a></li>
                                 </ul>
                             </li>
                         </c:when>
@@ -771,6 +705,34 @@
         </div>
     </div>
 
+    <!-- Category Bar -->
+    <div class="container">
+        <div class="category-bar">
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <c:forEach var="category" items="${categories}">
+                    <a href="${pageContext.request.contextPath}/news?action=category&id=${category.id}"
+                       class="category-item">
+                        <c:choose>
+                            <c:when test="${category.name == 'Thể thao'}">
+                                <i class="fas fa-football"></i>
+                            </c:when>
+                            <c:when test="${category.name == 'Kinh doanh'}">
+                                <i class="bi bi-bar-chart-fill"></i>
+                            </c:when>
+                            <c:when test="${category.name == 'Công nghệ'}">
+                                <i class="fas fa-microchip"></i>
+                            </c:when>
+                            <c:otherwise>
+                                <i class="fas fa-tag"></i>
+                            </c:otherwise>
+                        </c:choose>
+                        ${category.name}
+                    </a>
+                </c:forEach>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <main class="container my-5">
         <div class="row">
@@ -786,7 +748,7 @@
                             <c:forEach var="news" items="${homeNews}" varStatus="status">
                                 <c:if test="${status.index < 3}">
                                     <div class="col-md-${status.index == 0 ? '12' : '6'} mb-4">
-                                        <div class="card news-card">
+                                        <div class="card news-card h-100">
                                             <c:if test="${not empty news.image}">
                                                 <img src="${pageContext.request.contextPath}/upload/${news.image}"
                                                     class="card-img-top news-image" alt="${news.title}">
@@ -824,7 +786,7 @@
                     <div class="row">
                         <c:forEach var="news" items="${latestNews}">
                             <div class="col-md-6 mb-4">
-                                <div class="card news-card">
+                                <div class="card news-card h-100">
                                     <c:if test="${not empty news.image}">
                                         <img src="${pageContext.request.contextPath}/upload/${news.image}"
                                             class="card-img-top news-image" alt="${news.title}">
@@ -862,8 +824,9 @@
                         <div class="most-viewed-item">
                             <div class="most-viewed-badge">${status.index + 1}</div>
                             <div class="flex-grow-1">
-                                <h6>
-                                    <a href="${pageContext.request.contextPath}/news?action=detail&id=${news.id}">
+                                <h6 class="mb-1">
+                                    <a href="${pageContext.request.contextPath}/news?action=detail&id=${news.id}"
+                                        class="text-decoration-none text-dark">
                                         ${news.title}
                                     </a>
                                 </h6>
@@ -883,7 +846,7 @@
                     <div class="list-group list-group-flush">
                         <c:forEach var="category" items="${categories}">
                             <a href="${pageContext.request.contextPath}/news?action=category&id=${category.id}"
-                                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 rounded-3 mb-2">
                                 ${category.name}
                                 <i class="fas fa-chevron-right"></i>
                             </a>
@@ -916,29 +879,18 @@
     <footer class="footer">
         <div class="container py-4">
             <div class="row">
-                <div class="col-md-4 mb-4">
+                <div class="col-md-6 mb-4">
                     <h5><i class="fas fa-newspaper"></i> ASM News</h5>
-                    <p>Website tin tức hàng đầu Việt Nam, cập nhật 24/7 các thông tin mới nhất về chính trị, kinh tế, văn hóa, thể thao và công nghệ.</p>
-                    <div class="social-links mt-3">
-                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <p>Website tin tức 24h cập nhật nhanh nhất</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-decoration-none me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-decoration-none me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-decoration-none me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-decoration-none"><i class="fab fa-youtube fa-lg"></i></a>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <h5>Liên kết nhanh</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="${pageContext.request.contextPath}/">Trang chủ</a></li>
-                        <li class="mb-2"><a href="${pageContext.request.contextPath}/news">Tin tức</a></li>
-                        <li class="mb-2"><a href="#">Về chúng tôi</a></li>
-                        <li class="mb-2"><a href="#">Liên hệ</a></li>
-                        <li class="mb-2"><a href="#">Chính sách bảo mật</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4 mb-4">
+                <div class="col-md-6 mb-4">
                     <h5>Đăng ký nhận tin</h5>
-                    <p class="mb-3">Cập nhật tin tức mới nhất vào email của bạn</p>
                     <form action="${pageContext.request.contextPath}/newsletter" method="post" class="d-flex gap-2">
                         <input type="hidden" name="action" value="subscribe">
                         <input type="email" name="email" class="form-control flex-grow-1"
@@ -949,7 +901,7 @@
                     </form>
                 </div>
             </div>
-            <hr>
+            <hr class="my-4" style="border-color: #334155;">
             <div class="row">
                 <div class="col-12 text-center">
                     <p class="mb-0">&copy; 2025 ASM News. All rights reserved. | Developed by FPT Polytechnic Student</p>

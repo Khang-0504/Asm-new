@@ -15,11 +15,98 @@
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
                 <style>
-                    .navbar-brand {
-                        font-weight: bold;
-                        color: #007bff !important;
-                    }
+           <!--  -->    
+                :root {
+    --primary-color: #1a365d;
+    --secondary-color: #2563eb;
+    --accent-color: #dc2626;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --bg-light: #f8fafc;
+    --bg-white: #ffffff;
+    --border-light: #e2e8f0;
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+                
+                .navbar {
+            background-color: var(--bg-white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+    width: 80%;
+}
 
+        .navbar.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand:hover {
+            color: var(--secondary-color);
+        }
+
+        .navbar-brand i {
+            color: var(--secondary-color);
+            margin-right: 8px;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-primary) !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin: 0 0.25rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background-color: var(--bg-light);
+            color: var(--secondary-color) !important;
+        }
+
+        .dropdown-menu {
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .dropdown-item {
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-light);
+            color: var(--secondary-color);
+        }
+
+       
+                   
+  * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
                     .news-image {
                         width: 100%;
                         height: 400px;
@@ -56,72 +143,71 @@
             </head>
 
             <body>
-                <!-- Header -->
-                <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-                    <div class="container">
-                        <a class="navbar-brand" href="${pageContext.request.contextPath}/">
-                            <i class="fas fa-newspaper"></i> ASM News
-                        </a>
+            
+            
+            	 <!-- Header -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/">
+                <i class="fas fa-newspaper"></i> ASM News
+            </a>
 
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarNav">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav me-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/">Trang chủ</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/news">Tin tức</a>
-                                </li>
-                                <c:forEach var="category" items="${categories}">
-                                    <li class="nav-item">
-                                        <a class="nav-link"
-                                            href="${pageContext.request.contextPath}/news?action=category&id=${category.id}">
-                                            ${category.name}
-                                        </a>
-                                    </li>
-                                </c:forEach>
-                            </ul>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="${pageContext.request.contextPath}/">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/news">Tin tức</a>
+                    </li>
+                    <c:forEach var="category" items="${categories}">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="${pageContext.request.contextPath}/news?action=category&id=${category.id}">
+                               ${category.name}
+                            </a>
+                        </li>
+                    </c:forEach>
+                </ul>
 
-                            <ul class="navbar-nav">
-                                <c:choose>
-                                    <c:when test="${sessionScope.currentUser != null}">
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                                                role="button" data-bs-toggle="dropdown">
-                                                <i class="fas fa-user"></i> ${sessionScope.currentUser.fullname}
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item"
-                                                        href="${pageContext.request.contextPath}/admin">
-                                                        <i class="fas fa-tachometer-alt"></i> Quản trị
-                                                    </a></li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li><a class="dropdown-item"
-                                                        href="${pageContext.request.contextPath}/logout">
-                                                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                                                    </a></li>
-                                            </ul>
-                                        </li>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="${pageContext.request.contextPath}/login">
-                                                <i class="fas fa-sign-in-alt"></i> Đăng nhập
-                                            </a>
-                                        </li>
-                                    </c:otherwise>
-                                </c:choose>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-
+                <ul class="navbar-nav">
+                    <c:choose>
+                        <c:when test="${sessionScope.currentUser != null}">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                   role="button" data-bs-toggle="dropdown">
+                                   <i class="fas fa-user-circle"></i> ${sessionScope.currentUser.fullname}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item"
+                                           href="${pageContext.request.contextPath}/admin">
+                                           <i class="fas fa-tachometer-alt"></i> Quản trị
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item"
+                                           href="${pageContext.request.contextPath}/logout">
+                                           <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                    </a></li>
+                                </ul>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/login">
+                                    <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                                </a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+                </ul>
+            </div>
+        </div>
+    </nav>
+                
                 <!-- Main Content -->
                 <main class="container my-4">
                     <div class="row">

@@ -250,8 +250,16 @@
                             </div>
                             <form action="${pageContext.request.contextPath}/admin/users/save" method="post">
                                 <div class="modal-body">
-                                    <input type="hidden" id="userId" name="id">
-                                    <div class="row">
+                                     <div class="row">
+						            <div class="col-md-6">
+						              <div class="mb-3">
+									    <label for="userId" class="form-label">Mã người dùng</label>
+									    <input type="text" class="form-control" id="userId" name="id" required>
+									</div>
+
+						            </div>
+						   
+                                    
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="userFullname" class="form-label">Họ tên <span
@@ -360,26 +368,29 @@
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
                 <script>
-                    function showAddUserModal() {
-                        document.getElementById('userModalTitle').textContent = 'Thêm người dùng mới';
-                        document.getElementById('saveUserBtn').textContent = 'Thêm mới';
-                        document.getElementById('userId').value = '';
-                        document.getElementById('userFullname').value = '';
-                        document.getElementById('userEmail').value = '';
-                        document.getElementById('userPassword').value = '';
-                        document.getElementById('userMobile').value = '';
-                        document.getElementById('userBirthday').value = '';
-                        document.getElementById('genderMale').checked = true;
-                        document.getElementById('roleReporter').checked = true;
+                function showAddUserModal() {
+                    document.getElementById('userModalTitle').textContent = 'Thêm người dùng mới';
+                    document.getElementById('saveUserBtn').textContent = 'Thêm mới';
+                    document.getElementById('userId').value = '';
+                    document.getElementById('userId').readOnly = false; // ✅ Cho nhập lại ID
+                    document.getElementById('userFullname').value = '';
+                    document.getElementById('userEmail').value = '';
+                    document.getElementById('userPassword').value = '';
+                    document.getElementById('userMobile').value = '';
+                    document.getElementById('userBirthday').value = '';
+                    document.getElementById('genderMale').checked = true;
+                    document.getElementById('roleReporter').checked = true;
 
-                        const modal = new bootstrap.Modal(document.getElementById('userModal'));
-                        modal.show();
-                    }
+                    const modal = new bootstrap.Modal(document.getElementById('userModal'));
+                    modal.show();
+                }
+
 
                     function editUser(id, fullname, email, birthday, gender, mobile, role) {
                         document.getElementById('userModalTitle').textContent = 'Sửa thông tin người dùng';
                         document.getElementById('saveUserBtn').textContent = 'Cập nhật';
                         document.getElementById('userId').value = id;
+                        document.getElementById('userId').readOnly = true; // ✅ Không cho sửa ID
                         document.getElementById('userFullname').value = fullname;
                         document.getElementById('userEmail').value = email;
                         document.getElementById('userPassword').required = false;

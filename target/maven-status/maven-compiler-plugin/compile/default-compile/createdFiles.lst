@@ -11,7 +11,10 @@ com\example\asmnews\entity\Category.class
 com\example\asmnews\entity\News.class
 com\example\asmnews\servlet\LoginServlet.class
 com\example\asmnews\servlet\BaseServlet.class
+com\example\asmnews\servlet\DeleteNewsletterServlet.class
 com\example\asmnews\servlet\UploadServlet.class
+ToggleNewsletterServlet.class
 com\example\asmnews\servlet\AdminServlet.class
 com\example\asmnews\utils\DatabaseUtils.class
 com\example\asmnews\entity\User.class
+com\example\asmnews\servlet\ToggleNewsletterServlet.class

@@ -18,6 +18,27 @@ public class UserDAO {
      * 
      * @return List<User>
      */
+	public List<User> findByRole(int role) {
+	    List<User> list = new ArrayList<>();
+	    String sql = "SELECT Id, Password, Fullname, Birthday, Gender, Mobile, Email, Role " +
+	                 "FROM Users WHERE Role = ? ORDER BY Fullname";
+
+	    try (Connection conn = DatabaseUtils.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setInt(1, role);
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            list.add(mapResultSetToUser(rs));
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.println("Lỗi khi lấy danh sách user theo role: " + e.getMessage());
+	    }
+
+	    return list;
+	}
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT Id, Password, Fullname, Birthday, Gender, Mobile, Email, Role " +
@@ -155,29 +176,28 @@ public class UserDAO {
      * @return true nếu thành công
      */
     public boolean insert(User user) {
-        String sql = "INSERT INTO Users (Id, Password, Fullname, Birthday, Gender, Mobile, Email, Role) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
+        String sql = "INSERT INTO Users (Id, Password, Fullname, Birthday, Gender, Mobile, Email, Role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getId());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getFullname());
             ps.setDate(4, user.getBirthday() != null ? new java.sql.Date(user.getBirthday().getTime()) : null);
-            ps.setObject(5, user.getGender());
+            ps.setObject(5, user.getGender() != null ? user.getGender() : false);
             ps.setString(6, user.getMobile());
             ps.setString(7, user.getEmail());
-            ps.setBoolean(8, user.getRole());
+            ps.setInt(8, user.getRole() ? 1 : 0);
 
-            int result = ps.executeUpdate();
-            return result > 0;
+
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Lỗi khi thêm user: " + e.getMessage());
+            e.printStackTrace(); // 👈 thêm dòng này để thấy lỗi cụ thể
             return false;
         }
     }
+
 
     /**
      * Cập nhật user

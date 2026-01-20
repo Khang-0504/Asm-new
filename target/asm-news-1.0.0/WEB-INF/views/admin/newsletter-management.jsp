@@ -178,63 +178,60 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <c:forEach var="newsletter" items="${newsletters}">
-                                                                        <tr>
-                                                                            <td>
-                                                                                <i class="fas fa-envelope"></i>
-                                                                                ${newsletter.email}
-                                                                            </td>
-                                                                            <td>
-                                                                                <c:choose>
-                                                                                    <c:when
-                                                                                        test="${newsletter.enabled}">
-                                                                                        <span class="badge bg-success">
-                                                                                            <i class="fas fa-check"></i>
-                                                                                            Hoạt động
-                                                                                        </span>
-                                                                                    </c:when>
-                                                                                    <c:otherwise>
-                                                                                        <span
-                                                                                            class="badge bg-secondary">
-                                                                                            <i class="fas fa-times"></i>
-                                                                                            Đã hủy
-                                                                                        </span>
-                                                                                    </c:otherwise>
-                                                                                </c:choose>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="btn-group" role="group">
-                                                                                    <c:choose>
-                                                                                        <c:when
-                                                                                            test="${newsletter.enabled}">
-                                                                                            <button type="button"
-                                                                                                class="btn btn-sm btn-outline-warning"
-                                                                                                onclick="toggleNewsletter('${newsletter.email}', false)"
-                                                                                                title="Vô hiệu hóa">
-                                                                                                <i
-                                                                                                    class="fas fa-pause"></i>
-                                                                                            </button>
-                                                                                        </c:when>
-                                                                                        <c:otherwise>
-                                                                                            <button type="button"
-                                                                                                class="btn btn-sm btn-outline-success"
-                                                                                                onclick="toggleNewsletter('${newsletter.email}', true)"
-                                                                                                title="Kích hoạt">
-                                                                                                <i
-                                                                                                    class="fas fa-play"></i>
-                                                                                            </button>
-                                                                                        </c:otherwise>
-                                                                                    </c:choose>
-                                                                                    <button type="button"
-                                                                                        class="btn btn-sm btn-outline-danger"
-                                                                                        onclick="deleteNewsletter('${newsletter.email}')"
-                                                                                        title="Xóa">
-                                                                                        <i class="fas fa-trash"></i>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </c:forEach>
+                                                                   <c:forEach var="newsletter" items="${newsletters}">
+<tr data-email="${newsletter.email}">
+    <td><i class="fas fa-envelope"></i> ${newsletter.email}</td>
+    <td>
+        <c:choose>
+            <c:when test="${newsletter.enabled}">
+                <span class="badge bg-success status-badge">
+                    <i class="fas fa-check"></i> Hoạt động
+                </span>
+            </c:when>
+            <c:otherwise>
+                <span class="badge bg-secondary status-badge">
+                    <i class="fas fa-times"></i> Đã hủy
+                </span>
+            </c:otherwise>
+        </c:choose>
+    </td>
+    <td>
+        <div class="btn-group" role="group">
+            <!-- Toggle button -->
+            <c:choose>
+                <c:when test="${newsletter.enabled}">
+                    <button type="button"
+                            class="btn btn-sm btn-outline-warning toggle-btn"
+                            data-email="${newsletter.email}"
+                            data-enabled="true"
+                            title="Vô hiệu hóa">
+                        <i class="fas fa-pause"></i>
+                    </button>
+                </c:when>
+                <c:otherwise>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-success toggle-btn"
+                            data-email="${newsletter.email}"
+                            data-enabled="false"
+                            title="Kích hoạt">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </c:otherwise>
+            </c:choose>
+
+            <!-- Delete button -->
+            <button type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    onclick="deleteNewsletter('${newsletter.email}')"
+                    title="Xóa">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </td>
+</tr>
+</c:forEach>
+                                                                   
+                                                                   
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -280,49 +277,90 @@
 
                 <!-- Bootstrap JS -->
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+                
+                
+				<script>
+				
+				function deleteNewsletter(email) {
+				    document.getElementById('deleteEmail').textContent = email;
 
+				    const confirmBtn = document.getElementById('confirmDelete');
+				    confirmBtn.onclick = function () {
+				        const params = new URLSearchParams();
+				        params.append('email', email);
+
+				        fetch('${pageContext.request.contextPath}/admin/newsletters/delete', {
+				            method: 'POST',
+				            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				            body: params.toString()
+				        })
+				        .then(res => res.json())
+				        .then(data => {
+				            if (data.success) {
+				            	const row = Array.from(document.querySelectorAll('tr[data-email]'))
+				                 .find(tr => tr.dataset.email === email);
+				                row.style.transition = 'opacity 0.3s';
+				                row.style.opacity = '0';
+				                setTimeout(() => row.remove(), 300);
+
+				                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+				                modal.hide();
+				            } else {
+				                alert(data.message || 'Xóa thất bại!');
+				            }
+				        })
+				        .catch(err => console.error(err));
+				    }
+
+				    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+				    modal.show();
+				}
+
+				
+				</script>
                 <script>
-                    function toggleNewsletter(email, enabled) {
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = '${pageContext.request.contextPath}/admin/newsletters/toggle';
+                document.querySelectorAll('.toggle-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const email = btn.dataset.email;
+                        const enabled = btn.dataset.enabled === 'true';
+                        
+                        fetch('${pageContext.request.contextPath}/admin/newsletters/toggle', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: 'email=' + encodeURIComponent(email) + '&enabled=' + (!enabled)
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if(data.success){
+                                // cập nhật trạng thái hiển thị
+                                const row = btn.closest('tr');
+                                const badge = row.querySelector('.status-badge');
+                                if(!enabled){
+                                    badge.className = 'badge bg-success status-badge';
+                                    badge.innerHTML = '<i class="fas fa-check"></i> Hoạt động';
+                                    btn.className = 'btn btn-sm btn-outline-warning toggle-btn';
+                                    btn.title = 'Vô hiệu hóa';
+                                    btn.querySelector('i').className = 'fas fa-pause';
+                                    btn.dataset.enabled = 'true';
+                                } else {
+                                    badge.className = 'badge bg-secondary status-badge';
+                                    badge.innerHTML = '<i class="fas fa-times"></i> Đã hủy';
+                                    btn.className = 'btn btn-sm btn-outline-success toggle-btn';
+                                    btn.title = 'Kích hoạt';
+                                    btn.querySelector('i').className = 'fas fa-play';
+                                    btn.dataset.enabled = 'false';
+                                }
+                            } else {
+                                alert(data.message || 'Có lỗi xảy ra!');
+                            }
+                        })
+                        .catch(err => console.error(err));
+                    });
+                });
 
-                        const emailInput = document.createElement('input');
-                        emailInput.type = 'hidden';
-                        emailInput.name = 'email';
-                        emailInput.value = email;
 
-                        const enabledInput = document.createElement('input');
-                        enabledInput.type = 'hidden';
-                        enabledInput.name = 'enabled';
-                        enabledInput.value = enabled;
 
-                        form.appendChild(emailInput);
-                        form.appendChild(enabledInput);
-                        document.body.appendChild(form);
-                        form.submit();
-                    }
 
-                    function deleteNewsletter(email) {
-                        document.getElementById('deleteEmail').textContent = email;
-                        document.getElementById('confirmDelete').onclick = function () {
-                            const form = document.createElement('form');
-                            form.method = 'POST';
-                            form.action = '${pageContext.request.contextPath}/admin/newsletters/delete';
-
-                            const emailInput = document.createElement('input');
-                            emailInput.type = 'hidden';
-                            emailInput.name = 'email';
-                            emailInput.value = email;
-
-                            form.appendChild(emailInput);
-                            document.body.appendChild(form);
-                            form.submit();
-                        };
-
-                        const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-                        modal.show();
-                    }
                 </script>
             </body>
 

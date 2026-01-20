@@ -359,9 +359,8 @@
             padding: 25px;
             margin-bottom: 25px;
             box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+          
+           
         }
 
         .sidebar-widget::before {
@@ -705,34 +704,7 @@
         </div>
     </div>
 
-    <!-- Category Bar -->
-    <div class="container">
-        <div class="category-bar">
-            <div class="d-flex flex-wrap justify-content-center gap-3">
-                <c:forEach var="category" items="${categories}">
-                    <a href="${pageContext.request.contextPath}/news?action=category&id=${category.id}"
-                       class="category-item">
-                        <c:choose>
-                            <c:when test="${category.name == 'Thể thao'}">
-                                <i class="fas fa-football"></i>
-                            </c:when>
-                            <c:when test="${category.name == 'Kinh doanh'}">
-                                <i class="bi bi-bar-chart-fill"></i>
-                            </c:when>
-                            <c:when test="${category.name == 'Công nghệ'}">
-                                <i class="fas fa-microchip"></i>
-                            </c:when>
-                            <c:otherwise>
-                                <i class="fas fa-tag"></i>
-                            </c:otherwise>
-                        </c:choose>
-                        ${category.name}
-                    </a>
-                </c:forEach>
-            </div>
-        </div>
-    </div>
-
+    
     <!-- Main Content -->
     <main class="container my-5">
         <div class="row">

@@ -440,84 +440,101 @@ public class AdminServlet extends BaseServlet {
      * Lưu user (chỉ admin)
      */
     private void saveUser(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+        throws IOException {
 
-        if (!checkAdminAccess(request, response)) {
-            return;
+    if (!checkAdminAccess(request, response)) {
+        return;
+    }
+
+    String userId = getParameter(request, "id", "").trim();
+    String password = getParameter(request, "password", "").trim();
+    String fullname = getParameter(request, "fullname", "").trim();
+    String birthdayStr = getParameter(request, "birthday", "").trim();
+    String genderStr = getParameter(request, "gender", "").trim();
+    String mobile = getParameter(request, "mobile", "").trim();
+    String email = getParameter(request, "email", "").trim();
+    boolean role = getBooleanParameter(request, "role");
+
+    // Kiểm tra thông tin bắt buộc
+    if (fullname.isEmpty() || email.isEmpty()) {
+        setErrorMessage(request, "Vui lòng nhập đầy đủ họ tên và email");
+        redirect(response, request.getContextPath() + "/admin/users");
+        return;
+    }
+
+    boolean isEdit = false;
+    User user = null;
+
+    // Nếu người dùng có ID => kiểm tra xem là sửa hay thêm
+    if (!userId.isEmpty()) {
+        user = userDAO.findById(userId);
+        if (user != null) {
+            isEdit = true; // có user trong DB => là sửa
         }
+    }
 
-        String userId = getParameter(request, "id", "");
-        String password = getParameter(request, "password", "");
-        String fullname = getParameter(request, "fullname", "");
-        String birthdayStr = getParameter(request, "birthday", "");
-        String genderStr = getParameter(request, "gender", "");
-        String mobile = getParameter(request, "mobile", "");
-        String email = getParameter(request, "email", "");
-        boolean role = getBooleanParameter(request, "role");
-
-        // Validate
-        if (fullname.isEmpty() || email.isEmpty()) {
-            setErrorMessage(request, "Vui lòng nhập đầy đủ thông tin bắt buộc");
+    if (!isEdit) {
+        // === THÊM MỚI ===
+        if (userId.isEmpty()) {
+            setErrorMessage(request, "Vui lòng nhập ID cho người dùng mới");
             redirect(response, request.getContextPath() + "/admin/users");
             return;
         }
 
-        boolean isEdit = !userId.isEmpty();
-        User user;
+        if (userDAO.findById(userId) != null) {
+            setErrorMessage(request, "ID này đã tồn tại, vui lòng nhập ID khác");
+            redirect(response, request.getContextPath() + "/admin/users");	
+            return;
+        }
 
-        if (isEdit) {
-            user = userDAO.findById(userId);
-            if (user == null) {
-                setErrorMessage(request, "Không tìm thấy người dùng");
-                redirect(response, request.getContextPath() + "/admin/users");
-                return;
-            }
+        if (password.isEmpty()) {
+            setErrorMessage(request, "Vui lòng nhập mật khẩu cho người dùng mới");
+            redirect(response, request.getContextPath() + "/admin/users");
+            return;
+        }
 
-            if (!password.isEmpty()) {
-                user.setPassword(password);
-            }
-        } else {
-            if (userId.isEmpty() || password.isEmpty()) {
-                setErrorMessage(request, "Vui lòng nhập ID và mật khẩu cho người dùng mới");
-                redirect(response, request.getContextPath() + "/admin/users");
-                return;
-            }
-
-            user = new User();
-            user.setId(userId);
+        user = new User();
+        user.setId(userId);
+        user.setPassword(password);
+    } else {
+        // === CẬP NHẬT ===
+        if (!password.isEmpty()) {
             user.setPassword(password);
         }
-
-        user.setFullname(fullname);
-        user.setMobile(mobile);
-        user.setEmail(email);
-        user.setRole(role);
-
-        // Parse birthday
-        if (!birthdayStr.isEmpty()) {
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                user.setBirthday(sdf.parse(birthdayStr));
-            } catch (ParseException e) {
-                // Ignore invalid date
-            }
-        }
-
-        // Parse gender
-        if (!genderStr.isEmpty()) {
-            user.setGender("true".equals(genderStr) || "1".equals(genderStr));
-        }
-
-        boolean success = isEdit ? userDAO.update(user) : userDAO.insert(user);
-
-        if (success) {
-            setSuccessMessage(request, isEdit ? "Cập nhật người dùng thành công!" : "Thêm người dùng thành công!");
-        } else {
-            setErrorMessage(request, isEdit ? "Có lỗi khi cập nhật người dùng" : "Có lỗi khi thêm người dùng");
-        }
-
-        redirect(response, request.getContextPath() + "/admin/users");
     }
+
+    // Xử lý ngày sinh
+    Date birthday = null;
+    if (!birthdayStr.isEmpty()) {
+        try {
+            birthday = new SimpleDateFormat("yyyy-MM-dd").parse(birthdayStr);
+        } catch (ParseException e) {
+            setErrorMessage(request, "Ngày sinh không hợp lệ");
+            redirect(response, request.getContextPath() + "/admin/users");
+            return;
+        }
+    }
+
+    // Gán dữ liệu chung
+    user.setFullname(fullname);
+    user.setBirthday(birthday);
+    user.setGender("male".equalsIgnoreCase(genderStr));
+    user.setMobile(mobile);
+    user.setEmail(email);
+    user.setRole(role);
+
+    // Lưu DB
+    boolean success = isEdit ? userDAO.update(user) : userDAO.insert(user);
+
+    if (success) {
+        setSuccessMessage(request, isEdit ? "Cập nhật người dùng thành công!" : "Thêm người dùng mới thành công!");
+    } else {
+        setErrorMessage(request, "Có lỗi khi lưu người dùng");
+    }
+
+    redirect(response, request.getContextPath() + "/admin/users");
+}
+
 
     /**
      * Xóa user (chỉ admin)
